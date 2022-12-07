@@ -1,9 +1,7 @@
 ECE513 Final Project (Particle MCU Side) - Team 3
 ======
 
-This is a UA ECE513 final project code of particle MCU side, and this project is a cloud heartrate monitor system for patient and physician.  
-In this code, we make Particle Argon can read out sensor value from MAX30102. After readout the value, it will display value on OLED screen and publish it to Particle cloud platform.  
-Because of this project include project properties setting. Therefore, we strongly recommend reset a new project and move ```/src/Module``` and ```ECE513_Cloud.ino``` to your project.
+This is a UA ECE513 final project code of particle MCU side, and this project is a cloud heartrate monitor system for patient and physician. In this code, we make Particle Argon can read out sensor value from MAX30102. After readout the value, it will display value on OLED screen and publish it to Particle cloud platform. Because of particle project include project properties setting. Therefore, we strongly recommend reset a new project and move ```/src/Module``` and ```ECE513_Cloud.ino``` to your project.
 
 **Team members:**
 
