@@ -30,7 +30,7 @@ For hardware setting, please follow the BOM list and Pin Assignment.
 ### BOM List and Pin Assignment
 |Device|Spec.|Number|Pin Assignment|
 | :- | :- | :- | :- |
-|Resistance|220 ohm|3|D2, D3, D4|
+|Resistor|220 ohm|3|D2, D3, D4|
 |Color LED|NTE30115|1|D2 – R, D3 – G, D4 – B|
 |Display|SSD1306 128x64|1|SCL, SDA|
 |Bottom|4 Pin|3|D7, D6, D5|
