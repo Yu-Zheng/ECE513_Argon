@@ -123,6 +123,10 @@ void loop()
   // calculate heart rate and SpO2 after first 100 samples (first 4 seconds of samples)
   maxim_heart_rate_and_oxygen_saturation(irBuffer, bufferLength, redBuffer, &spo2, &validSPO2, &heartRate, &validHeartRate);
 
+  String Cloud_List = "";
+  bool success;
+  success = Particle.publish("hr", Cloud_HR, PRIVATE);
+
   // Continuously taking samples from MAX30102.  Heart rate and SpO2 are calculated every 1 second
   while (1)
   {
@@ -149,24 +153,41 @@ void loop()
     String Cloud_HR = String(heartRate);
     String Cloud_SPO2 = String(spo2);
 
-    String Send_Data = "{\"HR\":" + Cloud_HR +",\"SPO2\":" + Cloud_SPO2 + "}";
+    String Send_Data = "{\"HR\":" + Cloud_HR + ",\"SPO2\":" + Cloud_SPO2 + "}";
     Particle.publish("hr", Send_Data, PRIVATE);
-    Serial.println(Send_Data);
-    /*
-    String Cloud_List = "";
+    Particle.publish("spo2", Cloud_SPO2, PRIVATE);
+
+    /* State Machine for disconnecting
+    unsigned long ms2Sec = 1000000; // Micro Second to Second
+    unsigned long periodic_sec = 1800; //30min
+    unsigned long periodic_ms = periodic_sec*ms2Sec;
+    unsigned long time_count;
     bool success;
-    success = Particle.publish("hr", Cloud_HR, PRIVATE)
-    if (!success) {
-      // get here if event publish did not work
-      ConnStatus = 1;
-      StartTime = Micros();
-      if (ConnectStatus) {
-        Cloud_List.concat(String(heartRate))
+
+    while(1){
+      String Cloud_List = "";
+      success = Particle.publish("hr", Cloud_HR, PRIVATE); //Send Data
+      if (!success){
+        ConnStatus = 0; //Change connect status
+        StartTime = Micros();
+        if (!ConnectStatus)
+        {
+          while (time_count>periodic_ms):{
+            heartRate = getHeartRate();
+            Cloud_List.concat(String(heartRate)); // Accumulated Data during off line (Store Data in device)
+            time_count = Micros() - StartTime;
+          }
+          String Send_Data = "{\"HR\": [" + Cloud_List + "]}"; // Send Array Data
+          success = Particle.publish("hr", Cloud_HR, PRIVATE);
+        }
+      }
+      else
+      {
+        Serial.println("Send Data Successful!");
       }
     }
-    
-    Particle.publish("spo2", Cloud_SPO2, PRIVATE);
     */
+
     // Serial_Print_Value(redBuffer[i], irBuffer[i], heartRate, validHeartRate, spo2, validSPO2);
     OLED_Show_Value(heartRate, spo2);
     // After gathering 25 new samples recalculate HR and SP02
@@ -178,6 +199,8 @@ void loop()
 
   Serial.print("\n");
 }
+
+void getHeartRate(){}
 
 // Draw QR code for login
 void drawQrCode(const char *qrStr, const char *lines[])
